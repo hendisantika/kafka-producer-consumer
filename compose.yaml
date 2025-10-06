@@ -62,8 +62,22 @@ services:
   manager:
     image: sheepkiller/kafka-manager
     ports:
-      - 9000:9000
+      - "9000:9000"
     environment:
       - ZK_HOSTS=zoo:2181
     depends_on:
+      - zoo
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    hostname: kafka-ui
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka1:19091,kafka2:19092,kafka3:19093
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zoo:2181
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
       - zoo
